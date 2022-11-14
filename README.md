@@ -1,4 +1,4 @@
-# FastAPI meetup
+# FastAPI Testing Mockup
 
 ## Proyecto
 
@@ -15,10 +15,12 @@ docker-compose exec db psql --username=distillery --dbname=distillery
 ```
 
 ## TODO:
-1. ORM
-2. Migraciones
-3. Autenticación
+1. Fix error "Trio"
 
 ## Recursos
 
-1. https://fastapi.tiangolo.com/
+1. https://fastapi.tiangolo.com/advanced/async-tests/
+2. https://fastapi.tiangolo.com/pt/tutorial/testing/
+3. https://trio-asyncio.readthedocs.io/en/latest/usage.html
+
+
