@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from app.db import database, metadata, engine
-from app.api.users import router as users_router
-from app.api.products import router as products_router
+from app.api.sample import router as sample_router
 
 app = FastAPI(title="FastAPI meetup")
 
@@ -11,8 +10,7 @@ def read_root():
     return {"hello": "devs"}
 
 
-app.include_router(users_router, prefix="/users", tags=["users"])
-app.include_router(products_router, prefix="/products", tags=["products"])
+app.include_router(sample_router, prefix="/sample", tags=["sample"])
 
 
 @app.on_event("startup")

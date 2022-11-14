@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class SampleSchema(BaseModel):
+class Sample(BaseModel):
     name: str = Field(
         title="Sample title",
         description="Sample description",
@@ -11,4 +11,6 @@ class SampleSchema(BaseModel):
         description="Sample description",
     )
 
+class CreateSample(Sample):
+    pass
 

@@ -1,2 +1,1 @@
-from app.schemas.users import BaseUser, CreateUser, User
-from app.schemas.products import Product, CreateProduct
+from app.schemas.sample_schema import CreateSample, Sample

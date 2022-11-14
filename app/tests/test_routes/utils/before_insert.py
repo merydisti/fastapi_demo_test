@@ -1,10 +1,10 @@
-from app.schemas.sample_schema import SampleSchema
+from app.models.sample import Sample
 
 
-def before_insert_sample(name="Sample 1", description="Sample description 1"):
-    sample = SampleSchema(
+async def before_insert_sample(name="Sample 1", description="Sample description 1"):
+    sample = Sample(
         name=name,
         description=description
     )
-    SampleSchema.objects.create(**sample.dict())
+    await Sample.objects.create(**sample.dict())
 

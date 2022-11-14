@@ -1,25 +1,36 @@
-from app.config import config
-from fastapi import FastAPI
+from app.main import app
 from fastapi.testclient import TestClient
 from typing import Generator
-from .mock_requests import *
-from unittest import mock
 from typing import Any
 import pytest
+from app.main import app
+from app.db import database, metadata, engine
+from httpx import AsyncClient
+from asgi_lifespan import LifespanManager
+
+#app = LifespanManager(app)
+
+# attach db to state
+app.state.database = database
+
+# define event like in production
+@app.on_event("startup")
+async def startup() -> None:
+    database_ = app.state.database
+    if not database_.is_connected:
+        await database_.connect()
 
 
-def start_application():
-    app = config()
-    test_client = TestClient(app)
-    return test_client
+@app.on_event("shutdown")
+async def shutdown() -> None:
+    database_ = app.state.database
+    metadata.drop_all(engine)
+    if database_.is_connected:
+        await database_.disconnect()
 
-@pytest.fixture(scope="function")
-def client() -> Generator[FastAPI, Any, None]:
-   
-    with \
-    mock.patch('requests.get', side_effect=mock_requests_get), \
-    mock.patch('requests.post', side_effect=mock_requests_post), \
-    mock.patch('requests.request', side_effect=mock_requests_request):
-        _app = start_application()
-        yield _app
 
+@pytest.fixture
+async def client() -> Generator[AsyncClient,Any,None]:
+    async with LifespanManager(app):
+        async with AsyncClient(app=app, base_url="http://test") as client:
+            yield client
